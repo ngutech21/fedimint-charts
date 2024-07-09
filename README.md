@@ -1,0 +1,2 @@
+- git clone
+- helm upgrade --install fedimint-mutinynet -n fedimint --create-namespace --values values.yaml

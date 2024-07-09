@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "fedimint.fullname" . }}
+  labels:
+    {{- include "fedimint.labels" . | nindent 4 }}
+spec:
+  serviceName: "{{ include "fedimint.fullname" . }}"
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "fedimint.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "fedimint.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "fedimint.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.fedimintd.image.repository }}:{{ .Values.fedimintd.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.fedimintd.image.pullPolicy }}
+          ports:
+            - name: fedimintd-p2p
+              containerPort: 8173
+              protocol: TCP
+            - name: fedimintd-api
+              containerPort: 8174
+              protocol: TCP
+          livenessProbe:
+          env:
+            - name: FM_BITCOIN_RPC_KIND
+              value: "esplora"
+            - name: FM_BITCOIN_RPC_URL
+              value: "https://mutinynet.com/api/"
+            - name: FM_BITCOIN_NETWORK
+              value: "signet"
+            - name: FM_BIND_P2P
+              value: "0.0.0.0:8173"
+            - name: FM_P2P_URL
+              value: "fedimint://127.0.0.1:8173"
+            - name: FM_BIND_API
+              value: "0.0.0.0:8174"
+            - name: FM_API_URL
+              value: "ws://127.0.0.1:8174"

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "guardian-ui.fullname" . }}
+  labels:
+    {{- include "guardian-ui.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "guardian-ui.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "guardian-ui.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: guardian-ui
+          image: "{{ .Values.guardianUI.image.repository }}:{{ .Values.guardianUI.image.tag }}"
+          imagePullPolicy: {{ .Values.guardianUI.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.guardianUI.service.port }}
+          env:
+            - name: PORT
+              value: {{ .Values.guardianUI.environment.PORT }}
+            - name: REACT_APP_FM_CONFIG_API
+              value: {{ .Values.guardianUI.environment.REACT_APP_FM_CONFIG_API }}
