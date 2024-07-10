@@ -44,6 +44,8 @@ spec:
               protocol: TCP
           livenessProbe:
           env:
+            - name: RUST_LOG
+              value: "debug"
             - name: FM_BITCOIN_RPC_KIND
               value: "esplora"
             - name: FM_BITCOIN_RPC_URL
@@ -57,4 +59,4 @@ spec:
             - name: FM_BIND_API
               value: "0.0.0.0:8174"
             - name: FM_API_URL
-              value: "ws://0.0.0.0:8174"
+              value: {{ .Values.fedimintd.config.fm_api_url }}
