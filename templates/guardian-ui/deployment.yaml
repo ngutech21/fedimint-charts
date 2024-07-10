@@ -18,12 +18,12 @@ spec:
     spec:
       containers:
         - name: guardian-ui
-          image: "{{ .Values.guardianUI.image.repository }}:{{ .Values.guardianUI.image.tag }}"
-          imagePullPolicy: {{ .Values.guardianUI.image.pullPolicy }}
+          image: "{{ .Values.guardianui.image.repository }}:{{ .Values.guardianui.image.tag }}"
+          imagePullPolicy: {{ .Values.guardianui.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.guardianUI.service.port }}
+            - containerPort: {{ .Values.guardianui.service.port }}
           env:
             - name: PORT
-              value: {{ .Values.guardianUI.environment.PORT }}
+              value: {{ .Values.guardianui.service.port | quote }}
             - name: REACT_APP_FM_CONFIG_API
-              value: {{ .Values.guardianUI.environment.REACT_APP_FM_CONFIG_API }}
+              value: {{ .Values.fedimintd.config.fm_api_url }}

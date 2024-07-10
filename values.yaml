@@ -22,6 +22,8 @@ fedimintd:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.3.0"
+  config:
+    fm_api_url: "ws://fedimint-mutinynet.fedimint.svc.cluster.local:8174"
 
 
 guardianui:
@@ -30,6 +32,12 @@ guardianui:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "0.3.0"
+  service:
+    type: ClusterIP
+    port: 3000
+  nameOverride: ""
+
+
 
 imagePullSecrets: []
 nameOverride: ""
@@ -91,12 +99,6 @@ readinessProbe:
     path: /
     port: http
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 # Additional volumes on the output Deployment definition.
 volumes: []

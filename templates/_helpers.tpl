@@ -60,3 +60,47 @@ Create the name of the service account to use
 {{- default "default" .Values.general.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Expand the name of the guardianui.
+*/}}
+{{- define "guardian-ui.name" -}}
+{{- default "guardian-ui" .Values.guardianui.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+
+{{- define "guardian-ui.fullname" -}}
+{{- if .Values.fullnameOverride }}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- $name := default "guardian-ui" .Values.nameOverride }}
+{{- if contains $name .Release.Name }}
+{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+
+{{/*
+Selector labels
+*/}}
+{{- define "guardian-ui.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "guardian-ui.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+
+{{/*
+Common labels
+*/}}
+{{- define "guardian-ui.labels" -}}
+helm.sh/chart: {{ include "fedimint.chart" . }}
+{{ include "guardian-ui.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}

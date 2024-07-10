@@ -7,9 +7,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
+    - name: fedimintd-p2p
+      port: 8173
+      targetPort: 8173
       protocol: TCP
-      name: http
+    - name: fedimintd-api
+      port: 8174
+      targetPort: 8174
+      protocol: TCP
   selector:
     {{- include "fedimint.selectorLabels" . | nindent 4 }}

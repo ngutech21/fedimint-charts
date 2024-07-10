@@ -5,10 +5,10 @@ metadata:
   labels:
     {{- include "guardian-ui.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.guardianUI.service.type }}
+  type: {{ .Values.guardianui.service.type }}
   ports:
-    - port: {{ .Values.guardianUI.service.port }}
-      targetPort: {{ .Values.guardianUI.service.port }}
+    - port: {{ .Values.guardianui.service.port }}
+      targetPort: {{ .Values.guardianui.service.port }}
       protocol: TCP
       name: http
   selector:

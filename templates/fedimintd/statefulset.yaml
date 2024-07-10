@@ -53,8 +53,8 @@ spec:
             - name: FM_BIND_P2P
               value: "0.0.0.0:8173"
             - name: FM_P2P_URL
-              value: "fedimint://127.0.0.1:8173"
+              value: "fedimint://0.0.0.0:8173"
             - name: FM_BIND_API
               value: "0.0.0.0:8174"
             - name: FM_API_URL
-              value: "ws://127.0.0.1:8174"
+              value: "ws://0.0.0.0:8174"
