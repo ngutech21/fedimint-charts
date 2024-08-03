@@ -47,11 +47,11 @@ spec:
             - name: RUST_LOG
               value: "debug"
             - name: FM_BITCOIN_RPC_KIND
-              value: "esplora"
+              value: {{ .Values.fedimintd.config.fm_bitcoin_rpc_kind }}
             - name: FM_BITCOIN_RPC_URL
-              value: "https://mutinynet.com/api/"
+              value: {{ .Values.fedimintd.config.fm_bitcoin_rpc_url }}
             - name: FM_BITCOIN_NETWORK
-              value: "signet"
+              value: {{ .Values.fedimintd.config.fm_bitcoin_network }}
             - name: FM_BIND_P2P
               value: "0.0.0.0:8173"
             - name: FM_P2P_URL

@@ -35,19 +35,17 @@ fedimintd:
     enabled: true
     className: ""
     annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
     hosts:
       - host: fedimintd-1.k3s.metal
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
   config:
     fm_api_url: "ws://fedimintd-1.k3s.metal"
+    fm_bitcoin_rpc_kind: "esplora"
+    fm_bitcoin_rpc_url: "https://mutinynet.com/api/"
+    fm_bitcoin_network: "signet"
 
 
 guardianui:
@@ -66,17 +64,12 @@ guardianui:
     enabled: true
     className: ""
     annotations: {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
     hosts:
       - host: fedimintui-1.k3s.metal
         paths:
           - path: /
             pathType: ImplementationSpecific
     tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
 
 
 imagePullSecrets: []
@@ -95,8 +88,6 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
-
 
 
 
@@ -121,21 +112,6 @@ readinessProbe:
     path: /
     port: http
 
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
 
 tolerations: []
 

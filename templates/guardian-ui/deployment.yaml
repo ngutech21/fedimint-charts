@@ -35,4 +35,3 @@ spec:
               value: {{ .Values.guardianui.service.port | quote }}
             - name: REACT_APP_FM_CONFIG_API
               value: {{ .Values.fedimintd.config.fm_api_url | quote }}
-              #value: ws://fedimint-mutinynet:8174
