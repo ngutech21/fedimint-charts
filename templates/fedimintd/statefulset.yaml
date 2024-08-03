@@ -60,3 +60,7 @@ spec:
               value: "0.0.0.0:8174"
             - name: FM_API_URL
               value: {{ .Values.fedimintd.config.fm_api_url }}
+          volumes:
+            - name: fedimintd-data
+              persistentVolumeClaim:
+                claimName: fedimintd-data

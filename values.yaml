@@ -27,6 +27,10 @@ fedimintd:
   service:
     type: ClusterIP
     port: 8174
+  pvc:
+    accessModes: ReadWriteOnce
+    storageClassName: ""
+    storage: 5Gi
   ingress:
     enabled: true
     className: ""
