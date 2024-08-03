@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "fedimint.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "fedimint.fullname" . }}:{{ .Values.fedimintd.service.port }}']
   restartPolicy: Never

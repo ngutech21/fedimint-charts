@@ -11,10 +11,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "fedimint.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.fedimintd.fullnameOverride }}
+{{- .Values.fedimintd.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default .Chart.Name .Values.nameOverride }}
+{{- $name := default .Chart.Name .Values.fedimintd.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -71,10 +71,10 @@ Expand the name of the guardianui.
 
 
 {{- define "guardian-ui.fullname" -}}
-{{- if .Values.fullnameOverride }}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{- if .Values.guardianui.fullnameOverride }}
+{{- .Values.guardianui.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default "guardian-ui" .Values.nameOverride }}
+{{- $name := default "guardian-ui" .Values.guardianui.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -82,6 +82,7 @@ Expand the name of the guardianui.
 {{- end }}
 {{- end }}
 {{- end }}
+
 
 
 {{/*

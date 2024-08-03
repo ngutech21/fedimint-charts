@@ -16,6 +16,14 @@ spec:
         app.kubernetes.io/name: {{ include "guardian-ui.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: fedimint
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - name: guardian-ui
           image: "{{ .Values.guardianui.image.repository }}:{{ .Values.guardianui.image.tag }}"
@@ -26,4 +34,5 @@ spec:
             - name: PORT
               value: {{ .Values.guardianui.service.port | quote }}
             - name: REACT_APP_FM_CONFIG_API
-              value: {{ .Values.fedimintd.config.fm_api_url }}
+              value: {{ .Values.fedimintd.config.fm_api_url | quote }}
+              #value: ws://fedimint-mutinynet:8174

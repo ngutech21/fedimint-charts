@@ -1,9 +1,9 @@
-{{- if .Values.fedimintd.ingress.enabled -}}
-{{- $fullName := include "fedimint.fullname" . -}}
-{{- $svcPort := .Values.fedimintd.service.port -}}
-{{- if and .Values.fedimintd.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
-  {{- if not (hasKey .Values.fedimintd.ingress.annotations "kubernetes.io/ingress.class") }}
-  {{- $_ := set .Values.fedimintd.ingress.annotations "kubernetes.io/ingress.class" .Values.fedimintd.ingress.className}}
+{{- if .Values.guardianui.ingress.enabled -}}
+{{- $fullName := include "guardian-ui.fullname" . -}}
+{{- $svcPort := .Values.guardianui.service.port -}}
+{{- if and .Values.guardianui.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.guardianui.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.guardianui.ingress.annotations "kubernetes.io/ingress.class" .Values.guardianui.ingress.className}}
   {{- end }}
 {{- end }}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -18,20 +18,17 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "fedimint.labels" . | nindent 4 }}
-  {{- with .Values.fedimintd.ingress.annotations }}
+  {{- with .Values.guardianui.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/proxy-buffering: "off"
 spec:
-  {{- if and .Values.fedimintd.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.fedimintd.ingress.className }}
+  {{- if and .Values.guardianui.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.guardianui.ingress.className }}
   {{- end }}
-  {{- if .Values.fedimintd.ingress.tls }}
+  {{- if .Values.guardianui.ingress.tls }}
   tls:
-    {{- range .Values.fedimintd.ingress.tls }}
+    {{- range .Values.guardianui.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -40,7 +37,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.fedimintd.ingress.hosts }}
+    {{- range .Values.guardianui.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

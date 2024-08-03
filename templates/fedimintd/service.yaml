@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "fedimint.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.fedimintd.service.type }}
   ports:
     - name: fedimintd-p2p
       port: 8173
