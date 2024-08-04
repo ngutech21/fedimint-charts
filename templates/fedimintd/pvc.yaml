@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: "fedimintd-data"
+  name: {{ include "fedimint.fullname" . }}
   labels:
     {{- include "fedimint.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - {{ .Values.fedimintd.pvc.accessModes | quote}}
+    - {{ .Values.fedimintd.storage.accessModes | quote}}
   resources:
     requests:
-      storage: {{ .Values.fedimintd.pvc.storage | quote}}
-  storageClassName: {{ .Values.fedimintd.pvc.storageClassName | quote}}
+      storage: {{ .Values.fedimintd.storage.storage | quote}}
+  storageClassName: {{ .Values.fedimintd.storage.storageClassName | quote}}

@@ -23,11 +23,11 @@ fedimintd:
     repository: fedimint/fedimintd
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.3.1" 
+    tag: "v0.3.3" 
   service:
     type: ClusterIP
     port: 8174
-  pvc:
+  storage:
     accessModes: ReadWriteOnce
     storageClassName: ""
     storage: 5Gi
@@ -46,6 +46,7 @@ fedimintd:
     fm_bitcoin_rpc_kind: "esplora"
     fm_bitcoin_rpc_url: "https://mutinynet.com/api/"
     fm_bitcoin_network: "signet"
+    fm_p2p_url: "fedimint://0.0.0.0:8173"
 
 
 guardianui:

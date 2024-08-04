@@ -55,7 +55,7 @@ spec:
             - name: FM_BIND_P2P
               value: "0.0.0.0:8173"
             - name: FM_P2P_URL
-              value: "fedimint://0.0.0.0:8173"
+              value: {{ .Values.fedimintd.config.fm_p2p_url }}
             - name: FM_BIND_API
               value: "0.0.0.0:8174"
             - name: FM_API_URL
@@ -63,4 +63,4 @@ spec:
           volumes:
             - name: fedimintd-data
               persistentVolumeClaim:
-                claimName: fedimintd-data
+                claimName: {{ include "fedimint.fullname" . }}
