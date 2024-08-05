@@ -12,27 +12,27 @@ spec:
       {{- include "fedimint.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.fedimintd.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "fedimint.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
+        {{- with .Values.fedimintd.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- with .Values.general.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "fedimint.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.fedimintd.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml .Values.fedimintd.securityContext | nindent 12 }}
           image: "{{ .Values.fedimintd.image.repository }}:{{ .Values.fedimintd.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.fedimintd.image.pullPolicy }}
           ports:
@@ -42,7 +42,22 @@ spec:
             - name: fedimintd-api
               containerPort: 8174
               protocol: TCP
+          {{ if .Values.fedimintd.probes.enabled }}
           livenessProbe:
+            tcpSocket:
+              port: {{ .Values.fedimintd.service.api.port }}
+            initialDelaySeconds: {{ .Values.fedimintd.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.fedimintd.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.fedimintd.probes.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.fedimintd.probes.liveness.timeoutSeconds }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.fedimintd.service.api.port }}
+            initialDelaySeconds: {{ .Values.fedimintd.probes.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.fedimintd.probes.readiness.failureThreshold }}
+            successThreshold: {{ .Values.fedimintd.probes.readiness.successThreshold }}
+            timeoutSeconds: {{ .Values.fedimintd.probes.readiness.timeoutSeconds }}
+          {{ end }}
           env:
             - name: RUST_LOG
               value: "debug"
@@ -64,3 +79,13 @@ spec:
             - name: fedimintd-data
               persistentVolumeClaim:
                 claimName: {{ include "fedimint.fullname" . }}
+          {{- with .Values.fedimintd.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.fedimintd.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+          {{ toYaml .Values.fedimintd.resources | nindent 12 }}

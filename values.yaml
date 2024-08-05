@@ -4,6 +4,7 @@
 
 
 general:
+  imagePullSecrets: []
   serviceAccount:
     # Specifies whether a service account should be created
     create: false
@@ -48,6 +49,46 @@ fedimintd:
       p2p: 
         host: p2p.fedimintd-1.k3s.metal
     tls: []
+  probes:
+    ## Enable/disable API probes for healthcheck
+    enabled: true
+    ## If pod is starting up/healthy
+    liveness:
+      initialDelaySeconds: 21
+      periodSeconds: 10
+      failureThreshold: 5
+      timeoutSeconds: 1
+    ## When to expose the pod to the service
+    readiness:
+      initialDelaySeconds: 5
+      failureThreshold: 5
+      successThreshold: 2
+      timeoutSeconds: 1
+  tolerations: []
+  affinity: {}
+  resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  podSecurityContext: {}
+  # fsGroup: 2000
+
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  podAnnotations: {}
+  podLabels: {}
   config:
     fm_bitcoin_rpc_kind: "esplora"
     fm_bitcoin_rpc_url: "https://mutinynet.com/api/"
@@ -82,47 +123,14 @@ guardianui:
     react_app_fm_config_api: "ws://api.fedimintd-1.k3s.metal"
 
 
-imagePullSecrets: []
-
-
-podAnnotations: {}
-podLabels: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
 
 
-tolerations: []
 
-affinity: {}
+
+
+
+
+
