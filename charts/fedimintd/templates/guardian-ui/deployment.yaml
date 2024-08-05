@@ -12,22 +12,32 @@ spec:
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
+      {{- with .Values.guardianui.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app.kubernetes.io/name: {{ include "guardian-ui.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "guardian-ui.labels" . | nindent 8 }}
+        {{- with .Values.guardianui.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       affinity:
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: fedimint
+                  app.kubernetes.io/name: fedimintd
                   app.kubernetes.io/instance: {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
+      securityContext:
+        {{- toYaml .Values.guardianui.podSecurityContext | nindent 8 }}
       containers:
         - name: guardian-ui
           image: "{{ .Values.guardianui.image.repository }}:{{ .Values.guardianui.image.tag }}"
           imagePullPolicy: {{ .Values.guardianui.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.guardianui.securityContext | nindent 12 }}
           ports:
             - containerPort: {{ .Values.guardianui.service.port }}
           env:
@@ -35,3 +45,29 @@ spec:
               value: {{ .Values.guardianui.service.port | quote }}
             - name: REACT_APP_FM_CONFIG_API
               value: {{ .Values.guardianui.config.react_app_fm_config_api | quote }}
+          {{ if .Values.guardianui.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.guardianui.service.port }}
+            initialDelaySeconds: {{ .Values.guardianui.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.guardianui.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.guardianui.probes.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.guardianui.probes.liveness.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.guardianui.service.port }}
+            initialDelaySeconds: {{ .Values.guardianui.probes.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.guardianui.probes.readiness.failureThreshold }}
+            successThreshold: {{ .Values.guardianui.probes.readiness.successThreshold }}
+            timeoutSeconds: {{ .Values.guardianui.probes.readiness.timeoutSeconds }}
+          {{ end }}
+          {{- with .Values.guardianui.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.guardianui.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+          {{ toYaml .Values.guardianui.resources | nindent 12 }}
