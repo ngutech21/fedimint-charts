@@ -37,10 +37,10 @@ spec:
           imagePullPolicy: {{ .Values.fedimintd.image.pullPolicy }}
           ports:
             - name: fedimintd-p2p
-              containerPort: 8173
+              containerPort: {{ .Values.fedimintd.service.p2p.port }}
               protocol: TCP
             - name: fedimintd-api
-              containerPort: 8174
+              containerPort: {{ .Values.fedimintd.service.api.port }}
               protocol: TCP
           {{ if .Values.fedimintd.probes.enabled }}
           livenessProbe:
@@ -68,11 +68,11 @@ spec:
             - name: FM_BITCOIN_NETWORK
               value: {{ .Values.fedimintd.config.fm_bitcoin_network }}
             - name: FM_BIND_P2P
-              value: "0.0.0.0:8173"
+              value: {{ printf "0.0.0.0:%d" (int .Values.fedimintd.service.p2p.port) | quote }}
             - name: FM_P2P_URL
               value: {{ .Values.fedimintd.config.fm_p2p_url }}
             - name: FM_BIND_API
-              value: "0.0.0.0:8174"
+              value: {{ printf "0.0.0.0:%d" (int .Values.fedimintd.service.api.port) | quote }}
             - name: FM_API_URL
               value: {{ .Values.fedimintd.config.fm_api_url }}
           volumes:

@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "fedimint.fullname" . }}:{{ .Values.fedimintd.service.api.port }}']
+      args: ['{{ include "guardian-ui.fullname" . }}:{{ .Values.guardianui.service.port }}']
   restartPolicy: Never
