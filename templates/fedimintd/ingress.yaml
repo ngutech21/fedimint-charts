@@ -1,6 +1,7 @@
 {{- if .Values.fedimintd.ingress.enabled -}}
 {{- $fullName := include "fedimint.fullname" . -}}
-{{- $svcPort := .Values.fedimintd.service.port -}}
+{{- $apiPort := .Values.fedimintd.service.api.port -}}
+{{- $p2pPort := .Values.fedimintd.service.p2p.port -}}
 {{- if and .Values.fedimintd.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.fedimintd.ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set .Values.fedimintd.ingress.annotations "kubernetes.io/ingress.class" .Values.fedimintd.ingress.className}}
@@ -40,25 +41,34 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.fedimintd.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ .Values.fedimintd.ingress.hosts.api.host | quote }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .pathType }}
-            {{- end }}
+          - path: /
+            pathType: ImplementationSpecific
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
                 name: {{ $fullName }}
                 port:
-                  number: {{ $svcPort }}
+                  number: {{ $apiPort }}
               {{- else }}
               serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              servicePort: {{ $apiPort }}
               {{- end }}
-          {{- end }}
-    {{- end }}
+    - host: {{ .Values.fedimintd.ingress.hosts.p2p.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $p2pPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $p2pPort }}
+              {{- end }}
 {{- end }}

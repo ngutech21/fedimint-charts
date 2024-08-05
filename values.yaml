@@ -26,7 +26,10 @@ fedimintd:
     tag: "v0.3.3" 
   service:
     type: ClusterIP
-    port: 8174
+    p2p:
+      port: 8173
+    api:
+      port: 8174
   storage:
     accessModes: ReadWriteOnce
     storageClassName: ""
@@ -36,17 +39,18 @@ fedimintd:
     className: ""
     annotations: {}
     hosts:
-      - host: fedimintd-1.k3s.metal
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
+      api:
+        host: api.fedimintd-1.k3s.metal
+      p2p: 
+        host: p2p.fedimintd-1.k3s.metal
     tls: []
   config:
-    fm_api_url: "ws://fedimintd-1.k3s.metal"
     fm_bitcoin_rpc_kind: "esplora"
     fm_bitcoin_rpc_url: "https://mutinynet.com/api/"
     fm_bitcoin_network: "signet"
-    fm_p2p_url: "fedimint://0.0.0.0:8173"
+    fm_api_url: "ws://api.fedimintd-1.k3s.metal"
+    #fm_p2p_url: "fedimint://0.0.0.0:8173"
+    fm_p2p_url: "fedimint://p2p.fedimintd-1.k3s.metal"
 
 
 guardianui:
@@ -66,7 +70,7 @@ guardianui:
     className: ""
     annotations: {}
     hosts:
-      - host: fedimintui-1.k3s.metal
+      - host: web.fedimint-1.k3s.metal
         paths:
           - path: /
             pathType: ImplementationSpecific
