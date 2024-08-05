@@ -10,4 +10,6 @@ spec:
   resources:
     requests:
       storage: {{ .Values.fedimintd.storage.storage | quote}}
-  storageClassName: {{ .Values.fedimintd.storage.storageClassName | quote}}
+  {{- if .Values.fedimintd.storage.storageClassName }}
+  storageClassName: {{ .Values.fedimintd.storage.storageClassName | quote }}
+  {{- end }}
