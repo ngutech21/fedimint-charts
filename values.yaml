@@ -37,7 +37,11 @@ fedimintd:
   ingress:
     enabled: true
     className: ""
-    annotations: {}
+    annotations:
+       # websocket support for fedimintd using ingress-nginx
+       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+       nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
       api:
         host: api.fedimintd-1.k3s.metal
@@ -49,7 +53,6 @@ fedimintd:
     fm_bitcoin_rpc_url: "https://mutinynet.com/api/"
     fm_bitcoin_network: "signet"
     fm_api_url: "ws://api.fedimintd-1.k3s.metal"
-    #fm_p2p_url: "fedimint://0.0.0.0:8173"
     fm_p2p_url: "fedimint://p2p.fedimintd-1.k3s.metal"
 
 
@@ -75,6 +78,8 @@ guardianui:
           - path: /
             pathType: ImplementationSpecific
     tls: []
+  config:
+    react_app_fm_config_api: "ws://api.fedimintd-1.k3s.metal"
 
 
 imagePullSecrets: []

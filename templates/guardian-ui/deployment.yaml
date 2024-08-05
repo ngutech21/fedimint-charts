@@ -34,4 +34,4 @@ spec:
             - name: PORT
               value: {{ .Values.guardianui.service.port | quote }}
             - name: REACT_APP_FM_CONFIG_API
-              value: {{ .Values.fedimintd.config.fm_api_url | quote }}
+              value: {{ .Values.guardianui.config.react_app_fm_config_api | quote }}
