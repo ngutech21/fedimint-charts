@@ -33,7 +33,7 @@ fedimintd:
   storage:
     accessModes: ReadWriteOnce
     storageClassName: ""
-    storage: 5Gi
+    size: 5Gi
   ingress:
     enabled: true
     className: ""
@@ -44,9 +44,9 @@ fedimintd:
        nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
       api:
-        host: api.fedimintd-1.k3s.metal
+        host: api.fedimintd-1.mydomain.com
       p2p: 
-        host: p2p.fedimintd-1.k3s.metal
+        host: p2p.fedimintd-1.mydomain.com
     tls: []
   probes:
     ## Enable/disable API probes for healthcheck
@@ -89,11 +89,11 @@ fedimintd:
   podAnnotations: {}
   podLabels: {}
   config:
-    fm_bitcoin_rpc_kind: "esplora"
-    fm_bitcoin_rpc_url: "https://mutinynet.com/api/"
-    fm_bitcoin_network: "signet"
-    fm_api_url: "ws://api.fedimintd-1.k3s.metal"
-    fm_p2p_url: "fedimint://p2p.fedimintd-1.k3s.metal"
+    fmBitcoinRpcKind: "esplora"
+    fmBitcoinRpcUrl: "https://mutinynet.com/api/"
+    fmBitcoinNetwork: "signet"
+    fmApiUrl: "ws://api.fedimintd-1.mydomain.com"
+    fmP2pUrl: "fedimint://p2p.fedimintd-1.mydomain.com"
 
 
 guardianui:
@@ -113,7 +113,7 @@ guardianui:
     className: ""
     annotations: {}
     hosts:
-      - host: web.fedimint-1.k3s.metal
+      - host: web.fedimint-1.mydomain.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -159,7 +159,7 @@ guardianui:
   podAnnotations: {}
   podLabels: {}
   config:
-    react_app_fm_config_api: "ws://api.fedimintd-1.k3s.metal"
+    reactAppFmConfigApi: "ws://api.fedimintd-1.mydomain.com"
 
 
 

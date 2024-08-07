@@ -9,7 +9,7 @@ spec:
     - {{ .Values.fedimintd.storage.accessModes | quote}}
   resources:
     requests:
-      storage: {{ .Values.fedimintd.storage.storage | quote}}
+      storage: {{ .Values.fedimintd.storage.size | quote}}
   {{- if .Values.fedimintd.storage.storageClassName }}
   storageClassName: {{ .Values.fedimintd.storage.storageClassName | quote }}
   {{- end }}

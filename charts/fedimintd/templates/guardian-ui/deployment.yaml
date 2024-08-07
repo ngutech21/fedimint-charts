@@ -44,7 +44,7 @@ spec:
             - name: PORT
               value: {{ .Values.guardianui.service.port | quote }}
             - name: REACT_APP_FM_CONFIG_API
-              value: {{ .Values.guardianui.config.react_app_fm_config_api | quote }}
+              value: {{ .Values.guardianui.config.reactAppFmConfigApi | quote }}
           {{ if .Values.guardianui.probes.enabled }}
           livenessProbe:
             httpGet:
