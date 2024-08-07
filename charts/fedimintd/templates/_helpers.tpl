@@ -23,6 +23,7 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
@@ -54,10 +55,10 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Create the name of the service account to use
 */}}
 {{- define "fedimint.serviceAccountName" -}}
-{{- if .Values.general.serviceAccount.create }}
-{{- default (include "fedimint.fullname" .) .Values.general.serviceAccount.name }}
+{{- if .Values.global.serviceAccount.create }}
+{{- default (include "fedimint.fullname" .) .Values.global.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.general.serviceAccount.name }}
+{{- default "default" .Values.global.serviceAccount.name }}
 {{- end }}
 {{- end }}
 
