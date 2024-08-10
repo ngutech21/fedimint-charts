@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gateway-ui.fullname" . }}
+  labels:
+    {{- include "gateway-ui.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "gateway-ui.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      {{- with .Values.gatewayui.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "gateway-ui.labels" . | nindent 8 }}
+        {{- with .Values.gatewayui.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: fedimintd
+                  app.kubernetes.io/instance: {{ .Release.Name }}
+              topologyKey: "kubernetes.io/hostname"
+      securityContext:
+        {{- toYaml .Values.gatewayui.podSecurityContext | nindent 8 }}
+      containers:
+        - name: guardian-ui
+          image: "{{ .Values.gatewayui.image.repository }}:{{ .Values.gatewayui.image.tag }}"
+          imagePullPolicy: {{ .Values.gatewayui.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.gatewayui.securityContext | nindent 12 }}
+          ports:
+            - containerPort: {{ .Values.gatewayui.service.port }}
+          env:
+            - name: PORT
+              value: {{ .Values.gatewayui.service.port | quote }}
+            # - name: REACT_APP_FM_CONFIG_API
+            #   value: {{ .Values.gatewayui.config.reactAppFmConfigApi | quote }}
+          {{ if .Values.gatewayui.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.gatewayui.service.port }}
+            initialDelaySeconds: {{ .Values.gatewayui.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.gatewayui.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.gatewayui.probes.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.gatewayui.probes.liveness.timeoutSeconds }}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.gatewayui.service.port }}
+            initialDelaySeconds: {{ .Values.gatewayui.probes.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.gatewayui.probes.readiness.failureThreshold }}
+            successThreshold: {{ .Values.gatewayui.probes.readiness.successThreshold }}
+            timeoutSeconds: {{ .Values.gatewayui.probes.readiness.timeoutSeconds }}
+          {{ end }}
+          {{- with .Values.gatewayui.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.gatewayui.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+          {{ toYaml .Values.gatewayui.resources | nindent 12 }}

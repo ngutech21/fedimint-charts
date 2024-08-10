@@ -1,0 +1,71 @@
+{{- if .Values.gatewayd.ingress.enabled -}}
+{{- $fullName := include "gateway.fullname" . -}}
+{{- $apiPort := .Values.gatewayd.service.api.port -}}
+{{- $p2pPort := .Values.gatewayd.service.p2p.port -}}
+{{- if and .Values.gatewayd.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.gatewayd.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.gatewayd.ingress.annotations "kubernetes.io/ingress.class" .Values.gatewayd.ingress.className}}
+  {{- end }}
+{{- end }}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "gateway.labels" . | nindent 4 }}
+  {{- with .Values.gatewayd.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if and .Values.gatewayd.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.gatewayd.ingress.className }}
+  {{- end }}
+  {{- if .Values.gatewayd.ingress.tls }}
+  tls:
+    {{- range .Values.gatewayd.ingress.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.gatewayd.ingress.hosts.api.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $apiPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $apiPort }}
+              {{- end }}
+    - host: {{ .Values.gatewayd.ingress.hosts.p2p.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $p2pPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $p2pPort }}
+              {{- end }}
+{{- end }}

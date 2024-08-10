@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gateway-ui.fullname" . }}
+  labels:
+    {{- include "gateway-ui.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.gatewayui.service.type }}
+  ports:
+    - port: {{ .Values.gatewayui.service.port }}
+      targetPort: {{ .Values.gatewayui.service.port }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "gateway-ui.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}

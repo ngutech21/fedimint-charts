@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "gateway.fullname" . }}
+  labels:
+    {{- include "gateway.labels" . | nindent 4 }}
+spec:
+  serviceName: "{{ include "gateway.fullname" . }}"
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "gateway.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.gatewayd.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "gateway.labels" . | nindent 8 }}
+        {{- with .Values.gatewayd.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gateway.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.gatewayd.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.gatewayd.securityContext | nindent 12 }}
+          image: "{{ .Values.gatewayd.image.repository }}:{{ .Values.gatewayd.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.gatewayd.image.pullPolicy }}
+          ports:
+            - name: fedimintd-p2p
+              containerPort: {{ .Values.gatewayd.service.p2p.port }}
+              protocol: TCP
+            - name: fedimintd-api
+              containerPort: {{ .Values.gatewayd.service.api.port }}
+              protocol: TCP
+          {{ if .Values.gatewayd.probes.enabled }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.gatewayd.service.api.port }}
+            initialDelaySeconds: {{ .Values.gatewayd.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.gatewayd.probes.liveness.periodSeconds }}
+            failureThreshold: {{ .Values.gatewayd.probes.liveness.failureThreshold }}
+            timeoutSeconds: {{ .Values.gatewayd.probes.liveness.timeoutSeconds }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.gatewayd.service.api.port }}
+            initialDelaySeconds: {{ .Values.gatewayd.probes.readiness.initialDelaySeconds }}
+            failureThreshold: {{ .Values.gatewayd.probes.readiness.failureThreshold }}
+            successThreshold: {{ .Values.gatewayd.probes.readiness.successThreshold }}
+            timeoutSeconds: {{ .Values.gatewayd.probes.readiness.timeoutSeconds }}
+          {{ end }}
+          env:
+            - name: RUST_LOG
+              value: "debug"
+            - name: FM_BITCOIN_RPC_KIND
+              value: {{ .Values.gatewayd.config.fmBitcoinRpcKind }}
+            - name: FM_BITCOIN_RPC_URL
+              value: {{ .Values.gatewayd.config.fmBitcoinRpcUrl }}
+            - name: FM_BITCOIN_NETWORK
+              value: {{ .Values.gatewayd.config.fmBitcoinNetwork }}
+            - name: FM_BIND_P2P
+              value: {{ printf "0.0.0.0:%d" (int .Values.gatewayd.service.p2p.port) | quote }}
+            - name: FM_P2P_URL
+              value: {{ .Values.gatewayd.config.fmP2pUrl }}
+            - name: FM_BIND_API
+              value: {{ printf "0.0.0.0:%d" (int .Values.gatewayd.service.api.port) | quote }}
+            - name: FM_API_URL
+              value: {{ .Values.gatewayd.config.fmApiUrl }}
+          volumes:
+            - name: fedimintd-data
+              persistentVolumeClaim:
+                claimName: {{ include "gateway.fullname" . }}
+          {{- with .Values.gatewayd.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.gatewayd.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+          {{ toYaml .Values.gatewayd.resources | nindent 12 }}

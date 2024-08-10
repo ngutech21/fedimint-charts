@@ -1,0 +1,161 @@
+# Default values for fedimint.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+global:
+  imagePullSecrets: []
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: false
+    # Automatically mount a ServiceAccount's API credentials?
+    automount: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+gatewayd:
+  nameOverride: ""
+  fullnameOverride: ""
+  image:
+    repository: fedimint/gatewayd
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.3.3" 
+  service:
+    type: ClusterIP
+    p2p:
+      port: 8173
+    api:
+      port: 8174
+  storage:
+    accessModes: ReadWriteOnce
+    storageClassName: ""
+    size: 5Gi
+  ingress:
+    enabled: true
+    className: ""
+    annotations:
+       # websocket support for fedimintd using ingress-nginx
+       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+       nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    hosts:
+      api:
+        host: api.fedimintd-1.mydomain.com
+      p2p: 
+        host: p2p.fedimintd-1.mydomain.com
+    tls: []
+  probes:
+    ## Enable/disable API probes for healthcheck
+    enabled: true
+    ## If pod is starting up/healthy
+    liveness:
+      initialDelaySeconds: 21
+      periodSeconds: 10
+      failureThreshold: 5
+      timeoutSeconds: 1
+    ## When to expose the pod to the service
+    readiness:
+      initialDelaySeconds: 5
+      failureThreshold: 5
+      successThreshold: 2
+      timeoutSeconds: 1
+  tolerations: []
+  affinity: {}
+  resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  podSecurityContext: {}
+  # fsGroup: 2000
+
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  podAnnotations: {}
+  podLabels: {}
+  config:
+    fmGatewayFees: "0,10000"
+    fmGatewayPassword: "thereisnosecondbest"
+    fmLndRpcAddr: "https://ln.mutinynet.exitfiat.de:10009"
+
+
+gatewayui:
+  nameOverride: ""
+  fullnameOverride: ""
+  image:
+    repository: fedimintui/gateway-ui
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "0.3.1"
+  service:
+    type: ClusterIP
+    port: 3000
+  
+  ingress:
+    enabled: true
+    className: ""
+    annotations: {}
+    hosts:
+      - host: web.fedimint-1.mydomain.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+  probes:
+    ## Enable/disable API probes for healthcheck
+    enabled: true
+    ## If pod is starting up/healthy
+    liveness:
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      failureThreshold: 5
+      timeoutSeconds: 1
+    ## When to expose the pod to the service
+    readiness:
+      initialDelaySeconds: 5
+      failureThreshold: 5
+      successThreshold: 2
+      timeoutSeconds: 1
+  tolerations: []
+  affinity: {}
+  resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+  podSecurityContext: {}
+  # fsGroup: 2000
+
+  securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  podAnnotations: {}
+  podLabels: {}
+  config:
+    
+
