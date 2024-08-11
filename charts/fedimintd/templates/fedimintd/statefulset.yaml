@@ -59,11 +59,9 @@ spec:
             timeoutSeconds: {{ .Values.fedimintd.probes.readiness.timeoutSeconds }}
           {{ end }}
           env:
-            - name: RUST_LOG
-              value: "debug"
-            - name: FM_BITCOIN_RPC_KIND
-              value: {{ .Values.fedimintd.config.fmBitcoinRpcKind }}
-            - name: FM_BITCOIN_RPC_URL
+            - name: FM_DEFAULT_BITCOIND_RPC_KIND
+              value: {{ .Values.fedimintd.config.fmBitcoinRpcKind}}
+            - name: FM_DEFAULT_BITCOIND_RPC_URL
               value: {{ .Values.fedimintd.config.fmBitcoinRpcUrl }}
             - name: FM_BITCOIN_NETWORK
               value: {{ .Values.fedimintd.config.fmBitcoinNetwork }}
@@ -75,6 +73,13 @@ spec:
               value: {{ printf "0.0.0.0:%d" (int .Values.fedimintd.service.api.port) | quote }}
             - name: FM_API_URL
               value: {{ .Values.fedimintd.config.fmApiUrl }}
+            - name: FM_REL_NOTES_ACK
+              value: {{ .Values.fedimintd.config.fmRelNotesAck | quote }}
+            {{- range .Values.fedimintd.additionalEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+          
           volumes:
             - name: fedimintd-data
               persistentVolumeClaim:

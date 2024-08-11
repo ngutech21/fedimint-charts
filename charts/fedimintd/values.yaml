@@ -23,7 +23,7 @@ fedimintd:
     repository: fedimint/fedimintd
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.3.3" 
+    tag: "v0.4.1" 
   service:
     type: ClusterIP
     p2p:
@@ -94,6 +94,11 @@ fedimintd:
     fmBitcoinNetwork: "signet"
     fmApiUrl: "ws://api.fedimintd-1.mydomain.com"
     fmP2pUrl: "fedimint://p2p.fedimintd-1.mydomain.com"
+    fmRelNotesAck: "0_4_xyz"
+  additionalEnv:
+    - name: RUST_LOG
+      value: debug
+    
 
 
 guardianui:
@@ -103,7 +108,7 @@ guardianui:
     repository: fedimintui/guardian-ui
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.3.1"
+    tag: "0.4.1"
   service:
     type: ClusterIP
     port: 3000
