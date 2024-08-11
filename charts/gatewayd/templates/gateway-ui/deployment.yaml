@@ -27,7 +27,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: fedimintd
+                  app.kubernetes.io/name: gatewayd
                   app.kubernetes.io/instance: {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       securityContext:
@@ -43,8 +43,10 @@ spec:
           env:
             - name: PORT
               value: {{ .Values.gatewayui.service.port | quote }}
-            # - name: REACT_APP_FM_CONFIG_API
-            #   value: {{ .Values.gatewayui.config.reactAppFmConfigApi | quote }}
+            - name: REACT_APP_FM_GATEWAY_API
+              value: {{ .Values.gatewayui.config.reactAppFmGatewayApi | quote }}
+            - name: REACT_APP_FM_GATEWAY_PASSWORD
+              value: {{ .Values.gatewayui.config.reactAppFmGatewayPassword | quote }}
           {{ if .Values.gatewayui.probes.enabled }}
           livenessProbe:
             httpGet:

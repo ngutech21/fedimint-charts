@@ -1,9 +1,9 @@
-{{- if .Values.guardianui.ingress.enabled -}}
-{{- $fullName := include "guardian-ui.fullname" . -}}
-{{- $svcPort := .Values.guardianui.service.port -}}
-{{- if and .Values.guardianui.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
-  {{- if not (hasKey .Values.guardianui.ingress.annotations "kubernetes.io/ingress.class") }}
-  {{- $_ := set .Values.guardianui.ingress.annotations "kubernetes.io/ingress.class" .Values.guardianui.ingress.className}}
+{{- if .Values.gatewayui.ingress.enabled -}}
+{{- $fullName := include "gateway-ui.fullname" . -}}
+{{- $svcPort := .Values.gatewayui.service.port -}}
+{{- if and .Values.gatewayui.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
+  {{- if not (hasKey .Values.gatewayui.ingress.annotations "kubernetes.io/ingress.class") }}
+  {{- $_ := set .Values.gatewayui.ingress.annotations "kubernetes.io/ingress.class" .Values.gatewayui.ingress.className}}
   {{- end }}
 {{- end }}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -17,18 +17,18 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "fedimint.labels" . | nindent 4 }}
-  {{- with .Values.guardianui.ingress.annotations }}
+    {{- include "gateway.labels" . | nindent 4 }}
+  {{- with .Values.gatewayui.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and .Values.guardianui.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.guardianui.ingress.className }}
+  {{- if and .Values.gatewayui.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+  ingressClassName: {{ .Values.gatewayui.ingress.className }}
   {{- end }}
-  {{- if .Values.guardianui.ingress.tls }}
+  {{- if .Values.gatewayui.ingress.tls }}
   tls:
-    {{- range .Values.guardianui.ingress.tls }}
+    {{- range .Values.gatewayui.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -37,7 +37,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.guardianui.ingress.hosts }}
+    {{- range .Values.gatewayui.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

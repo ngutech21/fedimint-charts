@@ -26,10 +26,8 @@ gatewayd:
     tag: "v0.3.3" 
   service:
     type: ClusterIP
-    p2p:
-      port: 8173
     api:
-      port: 8174
+      port: 80
   storage:
     accessModes: ReadWriteOnce
     storageClassName: ""
@@ -44,9 +42,7 @@ gatewayd:
        nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
       api:
-        host: api.fedimintd-1.mydomain.com
-      p2p: 
-        host: p2p.fedimintd-1.mydomain.com
+        host: api.gateway.mydomain.com
     tls: []
   probes:
     ## Enable/disable API probes for healthcheck
@@ -92,6 +88,7 @@ gatewayd:
     fmGatewayFees: "0,10000"
     fmGatewayPassword: "thereisnosecondbest"
     fmLndRpcAddr: "https://ln.mutinynet.exitfiat.de:10009"
+    fmGatewayApiAddr: "http://gateway.mydomain.com"
 
 
 gatewayui:
@@ -104,14 +101,14 @@ gatewayui:
     tag: "0.3.1"
   service:
     type: ClusterIP
-    port: 3000
+    port: 80
   
   ingress:
     enabled: true
     className: ""
     annotations: {}
     hosts:
-      - host: web.fedimint-1.mydomain.com
+      - host: web.gateway.mydomain.com
         paths:
           - path: /
             pathType: ImplementationSpecific
@@ -157,5 +154,7 @@ gatewayui:
   podAnnotations: {}
   podLabels: {}
   config:
+    reactAppFmGatewayApi: "http://gatewayd.fedimint.mydomain.com"
+    reactAppFmGatewayPassword: "thereisnosecondbest"
     
 

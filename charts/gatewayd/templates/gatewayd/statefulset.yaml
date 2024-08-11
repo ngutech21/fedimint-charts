@@ -36,10 +36,7 @@ spec:
           image: "{{ .Values.gatewayd.image.repository }}:{{ .Values.gatewayd.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.gatewayd.image.pullPolicy }}
           ports:
-            - name: fedimintd-p2p
-              containerPort: {{ .Values.gatewayd.service.p2p.port }}
-              protocol: TCP
-            - name: fedimintd-api
+            - name: gatewayd-api
               containerPort: {{ .Values.gatewayd.service.api.port }}
               protocol: TCP
           {{ if .Values.gatewayd.probes.enabled }}
@@ -58,27 +55,34 @@ spec:
             successThreshold: {{ .Values.gatewayd.probes.readiness.successThreshold }}
             timeoutSeconds: {{ .Values.gatewayd.probes.readiness.timeoutSeconds }}
           {{ end }}
+          args:
+            - gatewayd
+            - lnd
           env:
             - name: RUST_LOG
-              value: "debug"
-            - name: FM_BITCOIN_RPC_KIND
-              value: {{ .Values.gatewayd.config.fmBitcoinRpcKind }}
-            - name: FM_BITCOIN_RPC_URL
-              value: {{ .Values.gatewayd.config.fmBitcoinRpcUrl }}
-            - name: FM_BITCOIN_NETWORK
-              value: {{ .Values.gatewayd.config.fmBitcoinNetwork }}
-            - name: FM_BIND_P2P
-              value: {{ printf "0.0.0.0:%d" (int .Values.gatewayd.service.p2p.port) | quote }}
-            - name: FM_P2P_URL
-              value: {{ .Values.gatewayd.config.fmP2pUrl }}
-            - name: FM_BIND_API
-              value: {{ printf "0.0.0.0:%d" (int .Values.gatewayd.service.api.port) | quote }}
-            - name: FM_API_URL
-              value: {{ .Values.gatewayd.config.fmApiUrl }}
-          volumes:
-            - name: fedimintd-data
-              persistentVolumeClaim:
-                claimName: {{ include "gateway.fullname" . }}
+              value: debug
+            - name: FM_GATEWAY_API_ADDR
+              value: {{ .Values.gatewayd.config.fmGatewayApiAddr | quote }}
+            - name: FM_GATEWAY_DATA_DIR
+              value: /gateway_data
+            - name: FM_GATEWAY_FEES
+              value: {{ .Values.gatewayd.config.fmGatewayFees | quote }}
+            - name: FM_GATEWAY_LISTEN_ADDR
+              value: 0.0.0.0:80
+            - name: FM_GATEWAY_PASSWORD
+              value: {{ .Values.gatewayd.config.fmGatewayPassword | quote }}
+            - name: FM_LND_MACAROON
+              value: /lnd_secrets/admin.macaroon
+            - name: FM_LND_RPC_ADDR
+              value: {{ .Values.gatewayd.config.fmLndRpcAddr | quote }}
+            - name: FM_LND_TLS_CERT
+              value: /lnd_secrets/tls.cert
+          volumeMounts:
+            # - mountPath: /gateway_data
+            #   name: fedimintd-data
+            - mountPath: /lnd_secrets
+              name: gateway-lnd-secrets
+              readOnly: true
           {{- with .Values.gatewayd.affinity }}
           affinity:
             {{- toYaml . | nindent 12 }}
@@ -89,3 +93,10 @@ spec:
           {{- end }}
           resources:
           {{ toYaml .Values.gatewayd.resources | nindent 12 }}
+      volumes:
+        - name: gatewayd-data
+          persistentVolumeClaim:
+            claimName: {{ include "gateway.fullname" . }}
+        - name: gateway-lnd-secrets
+          secret:
+            secretName: gateway-lnd-secrets
