@@ -89,6 +89,9 @@ gatewayd:
     fmGatewayPassword: "thereisnosecondbest"
     fmLndRpcAddr: "https://ln.mutinynet.exitfiat.de:10009"
     fmGatewayApiAddr: "http://gateway.mydomain.com"
+  additionalEnv:
+    # - name: MY_ENV_VAR
+    #   value: some_value
 
 
 gatewayui:

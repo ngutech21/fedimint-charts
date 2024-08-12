@@ -77,9 +77,11 @@ spec:
               value: {{ .Values.gatewayd.config.fmLndRpcAddr | quote }}
             - name: FM_LND_TLS_CERT
               value: /lnd_secrets/tls.cert
+            {{- range .Values.gatewayd.additionalEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
           volumeMounts:
-            # - mountPath: /gateway_data
-            #   name: fedimintd-data
             - mountPath: /lnd_secrets
               name: gateway-lnd-secrets
               readOnly: true
