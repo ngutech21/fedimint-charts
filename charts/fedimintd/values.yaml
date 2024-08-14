@@ -35,7 +35,7 @@ fedimintd:
     storageClassName: ""
     size: 5Gi
   ingress:
-    enabled: true
+    enabled: false
     className: ""
     annotations:
        # websocket support for fedimintd using ingress-nginx
@@ -114,7 +114,7 @@ guardianui:
     port: 3000
   
   ingress:
-    enabled: true
+    enabled: false
     className: ""
     annotations: {}
     hosts:
@@ -165,16 +165,4 @@ guardianui:
   podLabels: {}
   config:
     reactAppFmConfigApi: "ws://api.fedimintd-1.mydomain.com"
-
-
-
-
-
-
-
-
-
-
-
-
 

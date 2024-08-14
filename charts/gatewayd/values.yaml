@@ -33,7 +33,7 @@ gatewayd:
     storageClassName: ""
     size: 5Gi
   ingress:
-    enabled: true
+    enabled: false
     className: ""
     annotations:
        # websocket support for fedimintd using ingress-nginx
@@ -87,7 +87,8 @@ gatewayd:
   config:
     fmGatewayFees: "0,10000"
     fmGatewayPassword: "thereisnosecondbest"
-    fmLndRpcAddr: "https://ln.mutinynet.exitfiat.de:10009"
+    # fmLndRpcAddr is the address of the LND node that the gatewayd will connect to 
+    fmLndRpcAddr: "https://ln.mydomain.com:10009"
     fmGatewayApiAddr: "http://gateway.mydomain.com"
   additionalEnv:
     # - name: MY_ENV_VAR
@@ -107,7 +108,7 @@ gatewayui:
     port: 80
   
   ingress:
-    enabled: true
+    enabled: false
     className: ""
     annotations: {}
     hosts:
