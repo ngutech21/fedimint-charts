@@ -23,7 +23,7 @@ gatewayd:
     repository: fedimint/gatewayd
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.3.3" 
+    tag: "v0.4.1" 
   service:
     type: ClusterIP
     api:
@@ -102,7 +102,7 @@ gatewayui:
     repository: fedimintui/gateway-ui
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: "0.3.1"
+    tag: "0.4.1"
   service:
     type: ClusterIP
     port: 80
