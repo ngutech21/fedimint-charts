@@ -66,9 +66,7 @@ Helm chart for deploying fedimintd
 | guardianui.ingress.enabled | bool | `false` |  |
 | guardianui.ingress.className | string | `""` |  |
 | guardianui.ingress.annotations | object | `{}` |  |
-| guardianui.ingress.hosts[0].host | string | `"web.fedimint-1.mydomain.com"` |  |
-| guardianui.ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| guardianui.ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| guardianui.ingress.hosts.web.host | string | `"web.fedimint-1.mydomain.com"` |  |
 | guardianui.ingress.tls | list | `[]` |  |
 | guardianui.probes.enabled | bool | `true` |  |
 | guardianui.probes.liveness.initialDelaySeconds | int | `10` |  |

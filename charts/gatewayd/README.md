@@ -17,7 +17,7 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | gatewayd.fullnameOverride | string | `""` |  |
 | gatewayd.image.repository | string | `"fedimint/gatewayd"` |  |
 | gatewayd.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gatewayd.image.tag | string | `"v0.3.3"` |  |
+| gatewayd.image.tag | string | `"v0.4.1"` |  |
 | gatewayd.service.type | string | `"ClusterIP"` |  |
 | gatewayd.service.api.port | int | `80` |  |
 | gatewayd.storage.accessModes | string | `"ReadWriteOnce"` |  |
@@ -55,15 +55,13 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | gatewayui.fullnameOverride | string | `""` |  |
 | gatewayui.image.repository | string | `"fedimintui/gateway-ui"` |  |
 | gatewayui.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gatewayui.image.tag | string | `"0.3.1"` |  |
+| gatewayui.image.tag | string | `"0.4.1"` |  |
 | gatewayui.service.type | string | `"ClusterIP"` |  |
 | gatewayui.service.port | int | `80` |  |
 | gatewayui.ingress.enabled | bool | `false` |  |
 | gatewayui.ingress.className | string | `""` |  |
 | gatewayui.ingress.annotations | object | `{}` |  |
-| gatewayui.ingress.hosts[0].host | string | `"web.gateway.mydomain.com"` |  |
-| gatewayui.ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| gatewayui.ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
+| gatewayui.ingress.hosts.web.host | string | `"web.gateway.mydomain.com"` |  |
 | gatewayui.ingress.tls | list | `[]` |  |
 | gatewayui.probes.enabled | bool | `true` |  |
 | gatewayui.probes.liveness.initialDelaySeconds | int | `10` |  |
