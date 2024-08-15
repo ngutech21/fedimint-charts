@@ -34,26 +34,14 @@ resource "helm_release" "fedimintd" {
     value = "fedimint://fedimint-${count.index + 1}-fedimintd:8173"
   }
 
-
-  // ######### guardianui #########
   set {
     name  = "guardianui.ingress.enabled"
     value = "true"
   }
 
   set {
-    name  = "guardianui.ingress.hosts[0].host"
+    name  = "guardianui.ingress.hosts.web.host"
     value = "web.fedimint-${count.index + 1}.${var.base_url}"
-  }
-
-  set {
-    name  = "guardianui.ingress.hosts[0].paths[0].path"
-    value = "/"
-  }
-
-  set {
-    name  = "guardianui.ingress.hosts[0].paths[0].pathType"
-    value = "ImplementationSpecific"
   }
 
   set {
@@ -115,20 +103,9 @@ resource "helm_release" "gatewayd" {
   }
 
   set {
-    name  = "gatewayui.ingress.hosts[0].host"
+    name  = "gatewayui.ingress.hosts.web.host"
     value = "web.gateway.${var.base_url}"
   }
-
-  set {
-    name  = "gatewayui.ingress.hosts[0].paths[0].path"
-    value = "/"
-  }
-
-  set {
-    name  = "gatewayui.ingress.hosts[0].paths[0].pathType"
-    value = "ImplementationSpecific"
-  }
-
 
   set {
     name  = "gatewayui.config.reactAppFmGatewayApi"
