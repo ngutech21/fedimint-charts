@@ -1,1 +1,6 @@
 /tmp
+/examples/terraform/.terraform
+/examples/terraform/.terraform.lock.hcl
+/examples/terraform/terraform.tfstate
+/examples/terraform/terraform.tfstate.backup
+*.tfvars
