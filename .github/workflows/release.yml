@@ -2,10 +2,8 @@
   name: Release Helm Charts
   
   on:
-    push:
-      branches:
-        - master
-  
+    workflow_dispatch:
+    
   jobs:
     release:
       permissions:
