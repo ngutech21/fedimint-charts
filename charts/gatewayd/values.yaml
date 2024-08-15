@@ -112,10 +112,11 @@ gatewayui:
     className: ""
     annotations: {}
     hosts:
-      - host: web.gateway.mydomain.com
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
+       web: 
+        host: web.gateway.mydomain.com
+        # paths:
+        #   - path: /
+        #     pathType: ImplementationSpecific
     tls: []
   probes:
     ## Enable/disable API probes for healthcheck
