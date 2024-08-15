@@ -37,9 +37,7 @@ Common labels
 {{- define "fedimint.labels" -}}
 helm.sh/chart: {{ include "fedimint.chart" . }}
 {{ include "fedimint.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
+app.kubernetes.io/version: {{ .Values.fedimintd.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -101,8 +99,6 @@ Common labels
 {{- define "guardian-ui.labels" -}}
 helm.sh/chart: {{ include "fedimint.chart" . }}
 {{ include "guardian-ui.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
+app.kubernetes.io/version: {{ .Values.guardianui.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}

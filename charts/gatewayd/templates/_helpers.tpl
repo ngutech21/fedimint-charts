@@ -37,9 +37,7 @@ Common labels
 {{- define "gateway.labels" -}}
 helm.sh/chart: {{ include "gateway.chart" . }}
 {{ include "gateway.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
+app.kubernetes.io/version: {{ .Values.gatewayd.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
@@ -101,8 +99,6 @@ Common labels
 {{- define "gateway-ui.labels" -}}
 helm.sh/chart: {{ include "gateway.chart" . }}
 {{ include "gateway-ui.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
+app.kubernetes.io/version: {{ .Values.gatewayui.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
