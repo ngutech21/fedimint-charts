@@ -3,6 +3,16 @@ entries:
   fedimintd:
   - apiVersion: v2
     appVersion: 0.4.1
+    created: "2024-08-15T14:06:58.920336291Z"
+    description: Helm chart for deploying fedimintd
+    digest: d157b9210a8e1f6c8f497463a5a937319353ad925e97527ac5b8f0b1b454297e
+    name: fedimintd
+    type: application
+    urls:
+    - https://github.com/ngutech21/fedimint-charts/releases/download/fedimintd-0.2.0/fedimintd-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.4.1
     created: "2024-08-14T12:23:43.100879773Z"
     description: Helm chart for deploying fedimintd
     digest: d91a6bf314bac570c6fad944d4606d913f1bed43033821191a0162c9522a6301
@@ -14,6 +24,16 @@ entries:
   gatewayd:
   - apiVersion: v2
     appVersion: 0.3.1
+    created: "2024-08-15T14:06:59.078403544Z"
+    description: Helm chart for deploying Fedimint LN-Gatewayd
+    digest: 25459630f20186b8eb2726207f28f7a75df2158b82c711cca04e211e30f3f831
+    name: gatewayd
+    type: application
+    urls:
+    - https://github.com/ngutech21/fedimint-charts/releases/download/gatewayd-0.2.0/gatewayd-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 0.3.1
     created: "2024-08-14T12:23:43.216335719Z"
     description: Helm chart for deploying Fedimint LN-Gatewayd
     digest: 6abe560079e94b0ab6e179a29c19664529fff8162d83cb7af98ec560b0d8a911
@@ -22,4 +42,4 @@ entries:
     urls:
     - https://github.com/ngutech21/fedimint-charts/releases/download/gatewayd-0.1.0/gatewayd-0.1.0.tgz
     version: 0.1.0
-generated: "2024-08-14T12:23:43.21634145Z"
+generated: "2024-08-15T14:06:59.078415446Z"
