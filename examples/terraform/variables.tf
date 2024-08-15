@@ -25,7 +25,7 @@ variable "gateway_lnd_tls_cert_path" {
   type        = string
 }
 
-variable "gateway_lnd_admin_macaroon_path" {
+variable "gateway_lnd_admin_macaroon_base64_path" {
   description = ""
   type        = string
 }

@@ -68,10 +68,12 @@ resource "kubernetes_secret_v1" "lnd_secrets" {
     namespace = var.namespace
   }
 
-  data = {
+  binary_data = {
     "tls.cert"       = filebase64(var.gateway_lnd_tls_cert_path)
-    "admin.macaroon" = filebase64(var.gateway_lnd_admin_macaroon_path)
+    "admin.macaroon" = file(var.gateway_lnd_admin_macaroon_base64_path)
   }
+
+  type = "Opaque"
 }
 
 
@@ -99,9 +101,13 @@ resource "helm_release" "gatewayd" {
 
   set {
     name  = "gatewayd.config.fmGatewayApiAddr"
-    value = "http://api.gateway.{var.base_url}"
+    value = "http://api.gateway.${var.base_url}"
   }
 
+  set {
+    name  = "gatewayd.ingress.hosts.api.host"
+    value = "api.gateway.${var.base_url}"
+  }
 
   set {
     name  = "gatewayui.ingress.enabled"
