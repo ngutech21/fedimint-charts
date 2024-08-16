@@ -2,7 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 global:
   imagePullSecrets: []
   serviceAccount:
@@ -23,7 +22,7 @@ fedimintd:
     repository: fedimint/fedimintd
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.4.1" 
+    tag: "v0.4.1"
   service:
     type: ClusterIP
     p2p:
@@ -38,14 +37,14 @@ fedimintd:
     enabled: false
     className: ""
     annotations:
-       # -- websocket support for fedimintd using ingress-nginx
-       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-buffering: "off"
+      # -- websocket support for fedimintd using ingress-nginx
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
       api:
         host: api.fedimintd-1.mydomain.com
-      p2p: 
+      p2p:
         host: p2p.fedimintd-1.mydomain.com
     tls: []
   probes:
@@ -98,8 +97,6 @@ fedimintd:
   additionalEnv:
     - name: RUST_LOG
       value: debug
-    
-
 
 guardianui:
   nameOverride: ""
@@ -112,14 +109,14 @@ guardianui:
   service:
     type: ClusterIP
     port: 3000
-  
+
   ingress:
     enabled: false
     className: ""
     annotations: {}
     hosts:
-        web:
-          host: web.fedimint-1.mydomain.com
+      web:
+        host: web.fedimint-1.mydomain.com
     tls: []
   probes:
     # -- Enable/disable API probes for healthcheck
@@ -163,4 +160,3 @@ guardianui:
   podLabels: {}
   config:
     reactAppFmConfigApi: "ws://api.fedimintd-1.mydomain.com"
-

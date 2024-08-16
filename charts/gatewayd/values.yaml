@@ -2,7 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 global:
   imagePullSecrets: []
   serviceAccount:
@@ -23,7 +22,7 @@ gatewayd:
     repository: fedimint/gatewayd
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.4.1" 
+    tag: "v0.4.1"
   service:
     type: ClusterIP
     api:
@@ -36,10 +35,10 @@ gatewayd:
     enabled: false
     className: ""
     annotations:
-       # websocket support for fedimintd using ingress-nginx
-       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-buffering: "off"
+      # websocket support for fedimintd using ingress-nginx
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
       api:
         host: api.gateway.mydomain.com
@@ -87,13 +86,12 @@ gatewayd:
   config:
     fmGatewayFees: "0,10000"
     fmGatewayPassword: "thereisnosecondbest"
-    # -- Address of the LND node that the gatewayd will connect to 
+    # -- Address of the LND node that the gatewayd will connect to
     fmLndRpcAddr: "https://ln.mydomain.com:10009"
     fmGatewayApiAddr: "http://gateway.mydomain.com"
   additionalEnv:
     # - name: MY_ENV_VAR
     #   value: some_value
-
 
 gatewayui:
   nameOverride: ""
@@ -106,13 +104,13 @@ gatewayui:
   service:
     type: ClusterIP
     port: 80
-  
+
   ingress:
     enabled: false
     className: ""
     annotations: {}
     hosts:
-       web: 
+      web:
         host: web.gateway.mydomain.com
     tls: []
   probes:
@@ -158,5 +156,3 @@ gatewayui:
   config:
     reactAppFmGatewayApi: "http://gatewayd.fedimint.mydomain.com"
     reactAppFmGatewayPassword: "thereisnosecondbest"
-    
-
