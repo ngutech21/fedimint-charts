@@ -6,13 +6,13 @@
 global:
   imagePullSecrets: []
   serviceAccount:
-    # Specifies whether a service account should be created
+    # -- Specifies whether a service account should be created
     create: false
-    # Automatically mount a ServiceAccount's API credentials?
+    # -- Automatically mount a ServiceAccount's API credentials?
     automount: true
-    # Annotations to add to the service account
+    # -- Annotations to add to the service account
     annotations: {}
-    # The name of the service account to use.
+    # -- The name of the service account to use.
     # If not set and create is true, a name is generated using the fullname template
     name: ""
 
@@ -22,7 +22,7 @@ gatewayd:
   image:
     repository: fedimint/gatewayd
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
+    # -- Overrides the image tag whose default is the chart appVersion.
     tag: "v0.4.1" 
   service:
     type: ClusterIP
@@ -45,15 +45,15 @@ gatewayd:
         host: api.gateway.mydomain.com
     tls: []
   probes:
-    ## Enable/disable API probes for healthcheck
+    # -- Enable/disable API probes for healthcheck
     enabled: true
-    ## If pod is starting up/healthy
+    # -- If pod is starting up/healthy
     liveness:
       initialDelaySeconds: 21
       periodSeconds: 10
       failureThreshold: 5
       timeoutSeconds: 1
-    ## When to expose the pod to the service
+    # -- When to expose the pod to the service
     readiness:
       initialDelaySeconds: 5
       failureThreshold: 5
@@ -87,7 +87,7 @@ gatewayd:
   config:
     fmGatewayFees: "0,10000"
     fmGatewayPassword: "thereisnosecondbest"
-    # fmLndRpcAddr is the address of the LND node that the gatewayd will connect to 
+    # -- Address of the LND node that the gatewayd will connect to 
     fmLndRpcAddr: "https://ln.mydomain.com:10009"
     fmGatewayApiAddr: "http://gateway.mydomain.com"
   additionalEnv:
@@ -101,7 +101,7 @@ gatewayui:
   image:
     repository: fedimintui/gateway-ui
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
+    # -- Overrides the image tag whose default is the chart appVersion.
     tag: "0.4.1"
   service:
     type: ClusterIP
@@ -114,20 +114,17 @@ gatewayui:
     hosts:
        web: 
         host: web.gateway.mydomain.com
-        # paths:
-        #   - path: /
-        #     pathType: ImplementationSpecific
     tls: []
   probes:
-    ## Enable/disable API probes for healthcheck
+    # -- Enable/disable API probes for healthcheck
     enabled: true
-    ## If pod is starting up/healthy
+    # -- If pod is starting up/healthy
     liveness:
       initialDelaySeconds: 10
       periodSeconds: 10
       failureThreshold: 5
       timeoutSeconds: 1
-    ## When to expose the pod to the service
+    # -- When to expose the pod to the service
     readiness:
       initialDelaySeconds: 5
       failureThreshold: 5

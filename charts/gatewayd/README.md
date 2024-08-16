@@ -1,6 +1,6 @@
 # gatewayd
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.3.1](https://img.shields.io/badge/AppVersion-0.3.1-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
 
 Helm chart for deploying Fedimint LN-Gatewayd
 
@@ -9,15 +9,15 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | global.imagePullSecrets | list | `[]` |  |
-| global.serviceAccount.create | bool | `false` |  |
-| global.serviceAccount.automount | bool | `true` |  |
-| global.serviceAccount.annotations | object | `{}` |  |
-| global.serviceAccount.name | string | `""` |  |
+| global.serviceAccount.create | bool | `false` | Specifies whether a service account should be created |
+| global.serviceAccount.automount | bool | `true` | Automatically mount a ServiceAccount's API credentials? |
+| global.serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
+| global.serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
 | gatewayd.nameOverride | string | `""` |  |
 | gatewayd.fullnameOverride | string | `""` |  |
 | gatewayd.image.repository | string | `"fedimint/gatewayd"` |  |
 | gatewayd.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gatewayd.image.tag | string | `"v0.4.1"` |  |
+| gatewayd.image.tag | string | `"v0.4.1"` | Overrides the image tag whose default is the chart appVersion. |
 | gatewayd.service.type | string | `"ClusterIP"` |  |
 | gatewayd.service.api.port | int | `80` |  |
 | gatewayd.storage.accessModes | string | `"ReadWriteOnce"` |  |
@@ -30,15 +30,9 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | gatewayd.ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffering" | string | `"off"` |  |
 | gatewayd.ingress.hosts.api.host | string | `"api.gateway.mydomain.com"` |  |
 | gatewayd.ingress.tls | list | `[]` |  |
-| gatewayd.probes.enabled | bool | `true` |  |
-| gatewayd.probes.liveness.initialDelaySeconds | int | `21` |  |
-| gatewayd.probes.liveness.periodSeconds | int | `10` |  |
-| gatewayd.probes.liveness.failureThreshold | int | `5` |  |
-| gatewayd.probes.liveness.timeoutSeconds | int | `1` |  |
-| gatewayd.probes.readiness.initialDelaySeconds | int | `5` |  |
-| gatewayd.probes.readiness.failureThreshold | int | `5` |  |
-| gatewayd.probes.readiness.successThreshold | int | `2` |  |
-| gatewayd.probes.readiness.timeoutSeconds | int | `1` |  |
+| gatewayd.probes.enabled | bool | `true` | Enable/disable API probes for healthcheck |
+| gatewayd.probes.liveness | object | `{"failureThreshold":5,"initialDelaySeconds":21,"periodSeconds":10,"timeoutSeconds":1}` | If pod is starting up/healthy |
+| gatewayd.probes.readiness | object | `{"failureThreshold":5,"initialDelaySeconds":5,"successThreshold":2,"timeoutSeconds":1}` | When to expose the pod to the service |
 | gatewayd.tolerations | list | `[]` |  |
 | gatewayd.affinity | object | `{}` |  |
 | gatewayd.resources | object | `{}` |  |
@@ -48,14 +42,14 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | gatewayd.podLabels | object | `{}` |  |
 | gatewayd.config.fmGatewayFees | string | `"0,10000"` |  |
 | gatewayd.config.fmGatewayPassword | string | `"thereisnosecondbest"` |  |
-| gatewayd.config.fmLndRpcAddr | string | `"https://ln.mydomain.com:10009"` |  |
+| gatewayd.config.fmLndRpcAddr | string | `"https://ln.mydomain.com:10009"` | Address of the LND node that the gatewayd will connect to  |
 | gatewayd.config.fmGatewayApiAddr | string | `"http://gateway.mydomain.com"` |  |
 | gatewayd.additionalEnv | string | `nil` |  |
 | gatewayui.nameOverride | string | `""` |  |
 | gatewayui.fullnameOverride | string | `""` |  |
 | gatewayui.image.repository | string | `"fedimintui/gateway-ui"` |  |
 | gatewayui.image.pullPolicy | string | `"IfNotPresent"` |  |
-| gatewayui.image.tag | string | `"0.4.1"` |  |
+| gatewayui.image.tag | string | `"0.4.1"` | Overrides the image tag whose default is the chart appVersion. |
 | gatewayui.service.type | string | `"ClusterIP"` |  |
 | gatewayui.service.port | int | `80` |  |
 | gatewayui.ingress.enabled | bool | `false` |  |
@@ -63,15 +57,9 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | gatewayui.ingress.annotations | object | `{}` |  |
 | gatewayui.ingress.hosts.web.host | string | `"web.gateway.mydomain.com"` |  |
 | gatewayui.ingress.tls | list | `[]` |  |
-| gatewayui.probes.enabled | bool | `true` |  |
-| gatewayui.probes.liveness.initialDelaySeconds | int | `10` |  |
-| gatewayui.probes.liveness.periodSeconds | int | `10` |  |
-| gatewayui.probes.liveness.failureThreshold | int | `5` |  |
-| gatewayui.probes.liveness.timeoutSeconds | int | `1` |  |
-| gatewayui.probes.readiness.initialDelaySeconds | int | `5` |  |
-| gatewayui.probes.readiness.failureThreshold | int | `5` |  |
-| gatewayui.probes.readiness.successThreshold | int | `2` |  |
-| gatewayui.probes.readiness.timeoutSeconds | int | `1` |  |
+| gatewayui.probes.enabled | bool | `true` | Enable/disable API probes for healthcheck |
+| gatewayui.probes.liveness | object | `{"failureThreshold":5,"initialDelaySeconds":10,"periodSeconds":10,"timeoutSeconds":1}` | If pod is starting up/healthy |
+| gatewayui.probes.readiness | object | `{"failureThreshold":5,"initialDelaySeconds":5,"successThreshold":2,"timeoutSeconds":1}` | When to expose the pod to the service |
 | gatewayui.tolerations | list | `[]` |  |
 | gatewayui.affinity | object | `{}` |  |
 | gatewayui.resources | object | `{}` |  |
