@@ -36,6 +36,12 @@ helm upgrade --install gatewayd-mutinynet fedimint/gatewayd -n fedimint --create
 ```
 
 
+## Examples
+For a practical example of how to use these Helm charts with Terraform, refer to the Terraform example provided in this repository. This example demonstrates how to setup a federation with 4 or more guardians and 1 gateway.
+
+- [Terraform Example](examples/terraform/README.md)
+
+
 
 
 
