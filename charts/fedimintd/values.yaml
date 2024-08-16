@@ -2,17 +2,16 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-
 global:
   imagePullSecrets: []
   serviceAccount:
-    # Specifies whether a service account should be created
+    # -- Specifies whether a service account should be created
     create: false
-    # Automatically mount a ServiceAccount's API credentials?
+    # -- Automatically mount a ServiceAccount's API credentials?
     automount: true
-    # Annotations to add to the service account
+    # -- Annotations to add to the service account
     annotations: {}
-    # The name of the service account to use.
+    # -- The name of the service account to use.
     # If not set and create is true, a name is generated using the fullname template
     name: ""
 
@@ -22,8 +21,8 @@ fedimintd:
   image:
     repository: fedimint/fedimintd
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.4.1" 
+    # -- Overrides the image tag whose default is the chart appVersion.
+    tag: "v0.4.1"
   service:
     type: ClusterIP
     p2p:
@@ -38,26 +37,26 @@ fedimintd:
     enabled: false
     className: ""
     annotations:
-       # websocket support for fedimintd using ingress-nginx
-       nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-       nginx.ingress.kubernetes.io/proxy-buffering: "off"
+      # -- websocket support for fedimintd using ingress-nginx
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
     hosts:
       api:
         host: api.fedimintd-1.mydomain.com
-      p2p: 
+      p2p:
         host: p2p.fedimintd-1.mydomain.com
     tls: []
   probes:
-    ## Enable/disable API probes for healthcheck
+    # -- Enable/disable API probes for healthcheck
     enabled: true
-    ## If pod is starting up/healthy
+    # -- If pod is starting up/healthy
     liveness:
       initialDelaySeconds: 21
       periodSeconds: 10
       failureThreshold: 5
       timeoutSeconds: 1
-    ## When to expose the pod to the service
+    # -- When to expose the pod to the service
     readiness:
       initialDelaySeconds: 5
       failureThreshold: 5
@@ -98,8 +97,6 @@ fedimintd:
   additionalEnv:
     - name: RUST_LOG
       value: debug
-    
-
 
 guardianui:
   nameOverride: ""
@@ -107,30 +104,30 @@ guardianui:
   image:
     repository: fedimintui/guardian-ui
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
+    # -- Overrides the image tag whose default is the chart appVersion.
     tag: "0.4.1"
   service:
     type: ClusterIP
     port: 3000
-  
+
   ingress:
     enabled: false
     className: ""
     annotations: {}
     hosts:
-        web:
-          host: web.fedimint-1.mydomain.com
+      web:
+        host: web.fedimint-1.mydomain.com
     tls: []
   probes:
-    ## Enable/disable API probes for healthcheck
+    # -- Enable/disable API probes for healthcheck
     enabled: true
-    ## If pod is starting up/healthy
+    # -- If pod is starting up/healthy
     liveness:
       initialDelaySeconds: 10
       periodSeconds: 10
       failureThreshold: 5
       timeoutSeconds: 1
-    ## When to expose the pod to the service
+    ## -- When to expose the pod to the service
     readiness:
       initialDelaySeconds: 5
       failureThreshold: 5
@@ -163,4 +160,3 @@ guardianui:
   podLabels: {}
   config:
     reactAppFmConfigApi: "ws://api.fedimintd-1.mydomain.com"
-
