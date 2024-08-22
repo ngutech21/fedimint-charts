@@ -57,7 +57,7 @@ spec:
           {{ end }}
           args:
             - gatewayd
-            - lnd
+            - {{ .Values.gatewayd.config.fmBackendType }}
           env:
             - name: RUST_LOG
               value: debug
@@ -71,20 +71,32 @@ spec:
               value: 0.0.0.0:80
             - name: FM_GATEWAY_PASSWORD
               value: {{ .Values.gatewayd.config.fmGatewayPassword | quote }}
+            {{- if eq .Values.gatewayd.config.fmBackendType "lnd"  }}
             - name: FM_LND_MACAROON
               value: /lnd_secrets/admin.macaroon
             - name: FM_LND_RPC_ADDR
               value: {{ .Values.gatewayd.config.fmLndRpcAddr | quote }}
             - name: FM_LND_TLS_CERT
               value: /lnd_secrets/tls.cert
+            {{- end -}}
+            {{- if eq .Values.gatewayd.config.fmBackendType "ldk"  }}
+            - name: FM_LDK_ESPLORA_SERVER_URL
+              value: {{ .Values.gatewayd.config.fmLdkEsploraServerUrl | quote }}
+            - name: FM_LDK_NETWORK
+              value: {{ .Values.gatewayd.config.fmLdkNetwork | quote }}
+            - name: FM_PORT_LDK
+              value: {{ .Values.gatewayd.config.fmLdkPort | quote }}
+            {{- end -}}
             {{- range .Values.gatewayd.additionalEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}
             {{- end }}
           volumeMounts:
+            {{- if eq .Values.gatewayd.config.fmBackendType "lnd"  }}
             - mountPath: /lnd_secrets
               name: gateway-lnd-secrets
               readOnly: true
+            {{- end  -}}
           {{- with .Values.gatewayd.affinity }}
           affinity:
             {{- toYaml . | nindent 12 }}
@@ -99,6 +111,8 @@ spec:
         - name: gatewayd-data
           persistentVolumeClaim:
             claimName: {{ include "gateway.fullname" . }}
+        {{- if eq .Values.gatewayd.config.fmBackendType "lnd"  }}
         - name: gateway-lnd-secrets
           secret:
             secretName: gateway-lnd-secrets
+        {{- end  -}}

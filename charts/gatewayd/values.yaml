@@ -86,12 +86,17 @@ gatewayd:
   config:
     fmGatewayFees: "0,10000"
     fmGatewayPassword: "thereisnosecondbest"
+    fmGatewayApiAddr: "http://gateway.mydomain.com"
+    # -- The type of backend to use on of "lnd","ldk","cln". At the moment only lnd is supported
+    fmBackendType: lnd
     # -- Address of the LND node that the gatewayd will connect to
     fmLndRpcAddr: "https://ln.mydomain.com:10009"
-    fmGatewayApiAddr: "http://gateway.mydomain.com"
+    # fmLdkEsploraServerUrl: "https://mutinynet.com/api/"
+    # fmLdkNetwork: "signet"
+    # fmLdkPort: "8080"
   additionalEnv:
-    # - name: MY_ENV_VAR
-    #   value: some_value
+  # - name: MY_ENV_VAR
+  #   value: some_value
 
 gatewayui:
   nameOverride: ""
