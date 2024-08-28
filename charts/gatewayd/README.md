@@ -1,8 +1,14 @@
 # gatewayd
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
 
 Helm chart for deploying Fedimint LN-Gatewayd
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| ngutech21 |  |  |
 
 ## Values
 
@@ -42,8 +48,9 @@ Helm chart for deploying Fedimint LN-Gatewayd
 | gatewayd.podLabels | object | `{}` |  |
 | gatewayd.config.fmGatewayFees | string | `"0,10000"` |  |
 | gatewayd.config.fmGatewayPassword | string | `"thereisnosecondbest"` |  |
-| gatewayd.config.fmLndRpcAddr | string | `"https://ln.mydomain.com:10009"` | Address of the LND node that the gatewayd will connect to  |
 | gatewayd.config.fmGatewayApiAddr | string | `"http://gateway.mydomain.com"` |  |
+| gatewayd.config.fmBackendType | string | `"lnd"` | The type of backend to use on of "lnd","ldk","cln". At the moment only lnd is supported |
+| gatewayd.config.fmLndRpcAddr | string | `"https://ln.mydomain.com:10009"` | Address of the LND node that the gatewayd will connect to |
 | gatewayd.additionalEnv | string | `nil` |  |
 | gatewayui.nameOverride | string | `""` |  |
 | gatewayui.fullnameOverride | string | `""` |  |
